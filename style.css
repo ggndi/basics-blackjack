@@ -53,6 +53,34 @@ button {
   width: 100%;
 }
 
+#game-input {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+#quit-button {
+  visibility: hidden;
+}
+
+#hit-button {
+  visibility: hidden;
+}
+
+#stand-button {
+  visibility: hidden;
+}
+#continue-button {
+  visibility: hidden;
+}
+#submit-button {
+  visibility: hidden;
+}
+#reset-button {
+  visibility: hidden;
+}
+
 .logo-img {
   height: 49px;
   position: relative;

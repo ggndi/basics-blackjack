@@ -35,6 +35,8 @@ var dealCard = function (playerIndex, noOfCard) {
   }
 };
 
+// return -1 if there is no winner
+// winOutcome | 0 - everyone busted | 1 - there is winner | 2 - draw
 var findWinner = function () {
   var maxScore = 0;
   scoreList = [];
@@ -49,9 +51,15 @@ var findWinner = function () {
     scoreList.push(score);
   }
   maxScore = Math.max.apply(Math, scoreList);
-  if (maxScore == 0 || checkForDraw(scoreList)) {
+  if (maxScore == 0) {
+    winOutcome = 0;
     return -1;
   }
+  if (checkForDraw(scoreList)) {
+    winOutcome = 2;
+    return -1;
+  }
+  winOutcome = 1;
   return globalStat[scoreList.indexOf(maxScore)].name;
 };
 
@@ -118,31 +126,56 @@ var initGame = function (input) {
   return `Game has been set for ${noOfPlayer} player(s). Next enter the player name (one by one).`;
 };
 
+const sta1 = "You have hit and you are alive. You can choose to hit again.";
+const sta2 = "You have busted, it is now next player turn to hit.";
+const sta3 = "You have busted, it is now dealer turn to be dealt.";
+
 var hit = function () {
   dealCard(currentPlayer, 1);
-  var myOutputValue;
+
+  if (!isCurrPlayerBust()) {
+    myOutputValue = sta1;
+  }
+  if (isCurrPlayerBust()) {
+    if (currentPlayer < noOfPlayer) {
+      globalStat[currentPlayer].bust = true;
+      currentPlayer++;
+      myOutputValue = sta2;
+    } else {
+      currentPlayer = 0;
+      gameMode = 4;
+      myOutputValue = sta3;
+      document.querySelector("#hit-button").disabled = true;
+      document.querySelector("#stand-button").disabled = true;
+      document.querySelector("#continue-button").disabled = false;
+    }
+  }
+  /* var myOutputValue;
   if (isCurrPlayerBust()) {
     globalStat[currentPlayer].bust = true;
     myOutputValue = `${globalStat[currentPlayer].name} have bust. `;
-    currentPlayer++;
-    if (currentPlayer < globalStat.length) {
+    if (currentPlayer == noOfPlayer) {
+      gameMode = 4;
+      currentPlayer = 0;
+    } else {
+      currentPlayer++;
+    }
+    if (currentPlayer < globalStat.length && gameMode != 4) {
       myOutputValue =
         myOutputValue +
         ` ${
           globalStat[Number(currentPlayer)].name
         } it is now your turn to hit or stand.`;
     }
-  } else {
+  } else if (gameMode != 4) {
     myOutputValue = `${globalStat[currentPlayer].name} have hit. And you are alive`;
-  }
-  if (currentPlayer == globalStat.length) {
+  } else if (gameMode == 4) {
     document.querySelector("#hit-button").disabled = true;
     document.querySelector("#stand-button").disabled = true;
-    gameMode = 4;
     document.querySelector("#continue-button").disabled = false;
     myOutputValue =
       myOutputValue + ` Please click continue to deal the dealer.`;
-  }
+  } */
   return myOutputValue;
 };
 
@@ -163,7 +196,7 @@ var checkForDraw = function (array) {
   let valuesAlreadySeen = [];
   for (let i = 0; i < array.length; i++) {
     let value = array[i];
-    if (valuesAlreadySeen.indexOf(value) !== -1) {
+    if (valuesAlreadySeen.indexOf(value) !== -1 && value != 0) {
       return true;
     }
     valuesAlreadySeen.push(value);
@@ -217,6 +250,7 @@ function resetGame() {
   noOfPlayer;
   currentPlayer = 1;
   scoreList = [];
+  winOutcome = 0;
 }
 
 var cardDeck = shuffleCards(makeDeck());
@@ -225,6 +259,7 @@ var gameMode = 0;
 var noOfPlayer;
 var currentPlayer = 1;
 var scoreList = [];
+var winOutcome = 0;
 
 var main = function (input) {
   var winner;
@@ -270,10 +305,16 @@ var main = function (input) {
   } else if (gameMode == 5) {
     document.getElementById("currPlayer").innerHTML = "";
     document.querySelector("#continue-button").disabled = true;
-    if (findWinner() == -1) {
+    findWinner();
+    if (winOutcome == 0) {
       return `Everyone has busted, it's a draw`;
     }
-    return `The winner is ` + findWinner();
+    if (winOutcome == 1) {
+      return `The winner is ` + findWinner();
+    }
+    if (winOutcome == 2) {
+      return `It is a draw, two or more players shared the same score`;
+    }
   }
 
   return myOutputValue;

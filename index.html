@@ -164,6 +164,7 @@
       submit.addEventListener("click", function() {
         var playerName = document.querySelector ("#input-field");
         var result = initPlayer (playerName.value);
+        cont.disabled = false;
         playerName.value = "";
         expose();
         output.innerHTML = result;

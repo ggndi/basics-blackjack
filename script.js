@@ -137,8 +137,8 @@ var hit = function () {
     myOutputValue = sta1;
   }
   if (isCurrPlayerBust()) {
+    globalStat[currentPlayer].bust = true;
     if (currentPlayer < noOfPlayer) {
-      globalStat[currentPlayer].bust = true;
       currentPlayer++;
       myOutputValue = sta2;
     } else {

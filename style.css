@@ -67,7 +67,6 @@ button {
 #input-field {
   font-size: 21px;
   line-height: 33px;
-  width: 200px;
   float: right;
   display: flex;
   align-items: flex-end;
@@ -112,7 +111,6 @@ button {
 }
 #submit-button {
   float: right;
-  margin-right: 118px;
   visibility: hidden;
 }
 

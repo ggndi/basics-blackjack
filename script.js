@@ -272,6 +272,8 @@ var main = function (input) {
     gameMode = 3;
     document.querySelector("#hit-button").style.visibility = "visible";
     document.querySelector("#stand-button").style.visibility = "visible";
+    document.querySelector("#hit-button").disabled = false;
+    document.querySelector("#stand-button").disabled = false;
     document.querySelector("#continue-button").disabled = true;
     myOutputValue = `All the card has been dealt to players. ${globalStat[currentPlayer].name} do you want to hit`;
   }

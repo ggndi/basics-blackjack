@@ -30,15 +30,10 @@ body {
   max-width: 100%;
   max-height: 200px;
 }
-.header {
-  text-align: center;
-  font-size: 1.1rem;
-  margin-bottom: 3rem;
-}
 
 #container {
   background-color: rgb(192, 255, 247);
-  margin: 40px auto;
+  margin: 10px auto;
   max-width: 800px;
   padding: 38px 31px;
 }

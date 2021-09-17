@@ -312,7 +312,7 @@ var main = function (input) {
       return `Everyone has busted, it's a draw`;
     }
     if (winOutcome == 1) {
-      return `The winner is ` + findWinner();
+      return `The winner is ` + findWinner() + ` 🎉`;
     }
     if (winOutcome == 2) {
       return `It is a draw, two or more players shared the same score`;

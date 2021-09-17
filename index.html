@@ -117,18 +117,22 @@
           <br />
         </div>
       </div>
+      <div>
       <button id="start-button">Start</button>
       <button id="hit-button">Hit</button>
       <button id="stand-button">Stand</button>
       <button id="continue-button">Continue</button>
       <button id="reset-button">Reset</button>
       <button id="submit-button">Submit</button>
+      </div>
       <p>Output:</p>
       <div id="output-div">
-        Welcome to Glenn's Cards! Enter the player number to get started!
+        Welcome to Glenn's Blackjack Game! Enter the number of player and press start to begin!
       </div>
-      <p>Card At Hand:</p>
-      <div id="output-div"></div>
+      <p>Current Turn:</p>
+      <div id="currPlayer"></div>
+      <p>Table Status:</p>
+      <div id="status"></div>
     </div>
 
     <!-- Import program logic -->
@@ -149,45 +153,58 @@
         var result = initGame (numPlayers.value);
         start.disabled = true;
         numPlayers.disabled = true;
-        output.innerHTML = result;
+        submit.disabled = false;
         submit.style.visibility = "visible";
+        reset.style.visibility = "visible";
+        output.innerHTML = result;
       });
 
       submit.addEventListener("click", function() {
         var playerName = document.querySelector ("#input-field");
         var result = initPlayer (playerName.value);
-        output.innerHTML = result;
         playerName.value = "";
+        expose();
+        output.innerHTML = result;
       });
 
       cont.addEventListener("click", function() {
         var result = main ();
+        expose();
+        showCurrPlayer();
         output.innerHTML = result;
       });
 
       hitButton.addEventListener("click", function () {
         var result = hit ();
+        expose();
+        showCurrPlayer();
         output.innerHTML = result;
       });
 
       standButton.addEventListener("click", function () {
         var result = stand ();
+        expose();
+        showCurrPlayer();
         output.innerHTML = result;
       });
 
-      button.addEventListener("click", function () {
-        // Set result to input value
-        var input = document.querySelector("#input-field");
-        var result = main(input.value);
 
-        // Display result in output element
-        var output = document.querySelector("#output-div");
-        output.innerHTML = result;
+      reset.addEventListener("click", function () {
+        resetGame();
+        start.disabled = false;
+        document.querySelector ("#input-field").disabled = false;
+        document.querySelector ("#num-player").disabled = false;
+        hitButton.style.visibility = "hidden";
+        standButton.style.visibility = "hidden";
+        cont.style.visibility = "hidden";
+        submit.style.visibility = "hidden";
+        reset.style.visibility = "hidden";
 
-        // Reset input value
-        input.value = "";
+        output.innerHTML = "Welcome to Glenn's Blackjack Game! Enter the number of player and press start to begin!";
+        document.getElementById("currPlayer").innerHTML = "";
+        document.getElementById("status").innerHTML = "";
+
       });
-
     </script>
   </body>
 </html>

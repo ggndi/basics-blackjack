@@ -49,6 +49,9 @@ var findWinner = function () {
     scoreList.push(score);
   }
   maxScore = Math.max.apply(Math, scoreList);
+  if (maxScore == 0) {
+    return -1;
+  }
   return globalStat[scoreList.indexOf(maxScore)].name;
 };
 
@@ -75,13 +78,13 @@ var makeDeck = function () {
     while (rankCounter <= 13) {
       var cardName = rankCounter;
       if (cardName == 1) {
-        cardName = "ace";
+        cardName = "A";
       } else if (cardName == 11) {
-        cardName = "jack";
+        cardName = "J";
       } else if (cardName == 12) {
-        cardName = "queen";
+        cardName = "Q";
       } else if (cardName == 13) {
-        cardName = "king";
+        cardName = "K";
       }
       var card = {
         name: cardName,
@@ -112,7 +115,7 @@ var initGame = function (input) {
   noOfPlayer = input;
   initDealer();
   gameMode = 1;
-  return `Game has been set for ${noOfPlayer} player(s). Next enter the player name one by one.`;
+  return `Game has been set for ${noOfPlayer} player(s). Next enter the player name (one by one).`;
 };
 
 var hit = function () {
@@ -147,6 +150,7 @@ var stand = function () {
   currentPlayer++;
   if (currentPlayer == Number(noOfPlayer) + 1) {
     gameMode = 4;
+    currentPlayer--;
     document.querySelector("#hit-button").disabled = true;
     document.querySelector("#stand-button").disabled = true;
     document.querySelector("#continue-button").disabled = false;
@@ -154,6 +158,54 @@ var stand = function () {
   }
   return `It is now ${globalStat[currentPlayer].name} turn to hit`;
 };
+
+function showCurrPlayer() {
+  console.log(currentPlayer);
+  document.getElementById("currPlayer").innerHTML =
+    globalStat[currentPlayer].name;
+}
+
+function expose() {
+  var statusStatement = [];
+  if (typeof globalStat[1] != "undefined") {
+    for (let i = 1; i < globalStat.length; i++) {
+      statusStatement.push(globalStat[i].name);
+      statusStatement.push(": ");
+      if (typeof globalStat[i].cartAtHand[0] != "undefined") {
+        for (let j = 0; j < globalStat[i].cartAtHand.length; j++) {
+          statusStatement.push(globalStat[i].cartAtHand[j].name);
+          statusStatement.push(globalStat[i].cartAtHand[j].suit);
+          if (j < globalStat[i].cartAtHand.length - 1) {
+            statusStatement.push(", ");
+          }
+        }
+      }
+      statusStatement.push(`<br>`);
+    }
+  }
+
+  if (typeof globalStat[0].cartAtHand[0] != "undefined") {
+    statusStatement.push(globalStat[0].name);
+    statusStatement.push(": ");
+    for (let j = 0; j < globalStat[0].cartAtHand.length; j++) {
+      statusStatement.push(globalStat[0].cartAtHand[j].name);
+      statusStatement.push(globalStat[0].cartAtHand[j].suit);
+      if (j < globalStat[0].cartAtHand.length - 1) {
+        statusStatement.push(", ");
+      }
+    }
+  }
+  document.getElementById("status").innerHTML = statusStatement.join("");
+}
+
+function resetGame() {
+  cardDeck = shuffleCards(makeDeck());
+  globalStat = [];
+  gameMode = 0;
+  noOfPlayer;
+  currentPlayer = 1;
+  scoreList = [];
+}
 
 var cardDeck = shuffleCards(makeDeck());
 var globalStat = [];
@@ -180,11 +232,13 @@ var main = function (input) {
     currentPlayer = 0;
     dealCard(0, 2);
     var dealerScore = 0;
+    var j = 0;
     for (let i = 0; i < globalStat[0].cartAtHand.length; i++) {
       dealerScore = dealerScore + Number(globalStat[0].cartAtHand[i].rank);
     }
     while (dealerScore < 17) {
       dealCard(0, 1);
+      j++;
       dealerScore = 0;
       for (let i = 0; i < globalStat[0].cartAtHand.length; i++) {
         dealerScore = dealerScore + Number(globalStat[0].cartAtHand[i].rank);
@@ -194,10 +248,20 @@ var main = function (input) {
       }
     }
     globalStat[currentPlayer].bust = isCurrPlayerBust();
+
+    if (j == 0) {
+      myOutputValue = `Dealer has been dealt 2 cards and chose not to hit.`;
+    } else {
+      myOutputValue = `Dealer has been dealt 2 cards and chose to hit ${j} times.`;
+    }
     gameMode = 5;
-    myOutputValue = `Dealer deal is success `;
   } else if (gameMode == 5) {
-    return `The Winner is ` + findWinner();
+    document.getElementById("currPlayer").innerHTML = "";
+    document.querySelector("#continue-button").disabled = true;
+    if (findWinner() == -1) {
+      return `Everyone has busted, it's a draw`;
+    }
+    return `The winner is ` + findWinner();
   }
 
   return myOutputValue;

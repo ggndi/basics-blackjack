@@ -25,8 +25,19 @@ body {
   margin-bottom: 3rem;
 }
 
+#status img {
+  display: block;
+  max-width: 100%;
+  max-height: 200px;
+}
+.header {
+  text-align: center;
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+}
+
 #container {
-  background-color: pink;
+  background-color: rgb(192, 255, 247);
   margin: 40px auto;
   max-width: 800px;
   padding: 38px 31px;
@@ -47,6 +58,31 @@ button {
   padding: 0 6px;
 }
 #output-div {
+  background-color: lightgrey;
+  margin: 20px auto;
+  padding: 20px;
+  width: 100%;
+}
+
+#input-field {
+  font-size: 21px;
+  line-height: 33px;
+  width: 300px;
+  float: right;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+#status {
+  background-color: lightgrey;
+  margin: 20px auto;
+  padding: 20px;
+  width: 100%;
+}
+
+#currPlayer {
   background-color: lightgrey;
   margin: 20px auto;
   padding: 20px;
@@ -75,8 +111,11 @@ button {
   visibility: hidden;
 }
 #submit-button {
+  float: right;
+  margin-right: 218px;
   visibility: hidden;
 }
+
 #reset-button {
   visibility: hidden;
 }

@@ -111,9 +111,9 @@
             value="1"
           />
         </div>
-        <div>
+        <div id="name-field">
           <p>Input:</p>
-            <input id="input-field" />
+          <input id="input-field" />
           <br />
         </div>
       </div>
@@ -151,7 +151,8 @@
       start.addEventListener("click", function() {
         var numPlayers = document.querySelector ("#num-player");
         var result = initGame (numPlayers.value);
-        document.querySelector ("#input-field").style.visibility = "visible";
+        document.querySelector("#name-field").style.visibility = "visible";
+        document.querySelector("#input-field").style.visibility = "visible";
         start.disabled = true;
         numPlayers.disabled = true;
         submit.disabled = false;
@@ -195,6 +196,8 @@
         start.disabled = false;
         document.querySelector ("#input-field").disabled = false;
         document.querySelector ("#num-player").disabled = false;
+        document.querySelector("#name-field").style.visibility = "hidden";
+        document.querySelector("#input-field").style.visibility = "hidden";
         hitButton.style.visibility = "hidden";
         standButton.style.visibility = "hidden";
         cont.style.visibility = "hidden";

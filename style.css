@@ -57,11 +57,19 @@ button {
   margin: 0 0 23px 0;
   padding: 0 6px;
 }
+
 #output-div {
   background-color: lightgrey;
   margin: 20px auto;
   padding: 20px;
   width: 100%;
+}
+
+#game-input {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 #input-field {
@@ -72,6 +80,10 @@ button {
   align-items: flex-end;
   justify-content: space-between;
   flex-wrap: wrap;
+  visibility: hidden;
+}
+
+#name-field {
   visibility: hidden;
 }
 
@@ -89,17 +101,6 @@ button {
   width: 100%;
 }
 
-#game-input {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-#quit-button {
-  visibility: hidden;
-}
-
 #hit-button {
   visibility: hidden;
 }
@@ -107,15 +108,17 @@ button {
 #stand-button {
   visibility: hidden;
 }
+
 #continue-button {
-  visibility: hidden;
-}
-#submit-button {
-  float: right;
   visibility: hidden;
 }
 
 #reset-button {
+  visibility: hidden;
+}
+
+#submit-button {
+  float: right;
   visibility: hidden;
 }
 

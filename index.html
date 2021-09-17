@@ -151,6 +151,7 @@
       start.addEventListener("click", function() {
         var numPlayers = document.querySelector ("#num-player");
         var result = initGame (numPlayers.value);
+        document.querySelector ("#input-field").style.visibility = "visible";
         start.disabled = true;
         numPlayers.disabled = true;
         submit.disabled = false;

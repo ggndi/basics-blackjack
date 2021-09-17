@@ -72,6 +72,7 @@ button {
   align-items: flex-end;
   justify-content: space-between;
   flex-wrap: wrap;
+  visibility: hidden;
 }
 
 #status {

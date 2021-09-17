@@ -49,7 +49,7 @@ var findWinner = function () {
     scoreList.push(score);
   }
   maxScore = Math.max.apply(Math, scoreList);
-  if (maxScore == 0) {
+  if (maxScore == 0 || checkForDraw(scoreList)) {
     return -1;
   }
   return globalStat[scoreList.indexOf(maxScore)].name;
@@ -157,6 +157,18 @@ var stand = function () {
     return `Everyone had their turn. Its dealer turn to be dealt. Click continue`;
   }
   return `It is now ${globalStat[currentPlayer].name} turn to hit`;
+};
+
+var checkForDraw = function (array) {
+  let valuesAlreadySeen = [];
+  for (let i = 0; i < array.length; i++) {
+    let value = array[i];
+    if (valuesAlreadySeen.indexOf(value) !== -1) {
+      return true;
+    }
+    valuesAlreadySeen.push(value);
+  }
+  return false;
 };
 
 function showCurrPlayer() {

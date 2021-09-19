@@ -23,7 +23,7 @@ var initPlayer = function (input) {
     document.querySelector("#submit-button").disabled = true;
     document.querySelector("#input-field").disabled = true;
     document.querySelector("#continue-button").style.visibility = "visible";
-    return `All names has been registered. Please click continue to deal cards to player.`;
+    return `All names have been registered. Please click continue to deal cards to player(s).`;
   } else {
     return `Please enter the next player name`;
   }
@@ -35,8 +35,6 @@ var dealCard = function (playerIndex, noOfCard) {
   }
 };
 
-// return -1 if there is no winner
-// winOutcome | 0 - everyone busted | 1 - there is winner | 2 - draw
 var findWinner = function () {
   var maxScore = 0;
   scoreList = [];
@@ -123,12 +121,12 @@ var initGame = function (input) {
   noOfPlayer = input;
   initDealer();
   gameMode = 1;
-  return `Game has been set for ${noOfPlayer} player(s). Next enter the player name (one by one).`;
+  return `Game has been set for ${noOfPlayer} player(s). Next, enter the player name.`;
 };
 
-const sta1 = "You have hit and you are alive. You can choose to hit again.";
+const sta1 = "You have hit and you survived. You can choose to hit again.";
 const sta2 = "You have busted, it is now next player turn to hit.";
-const sta3 = "You have busted, it is now dealer turn to be dealt.";
+const sta3 = "You have busted, it is now dealer's turn. Click continue.";
 
 var hit = function () {
   dealCard(currentPlayer, 1);
@@ -187,9 +185,9 @@ var stand = function () {
     document.querySelector("#hit-button").disabled = true;
     document.querySelector("#stand-button").disabled = true;
     document.querySelector("#continue-button").disabled = false;
-    return `Everyone had their turn. Its dealer turn to be dealt. Click continue`;
+    return `Everyone had their turn. It is now dealer's turn. Click continue`;
   }
-  return `It is now ${globalStat[currentPlayer].name} turn to hit`;
+  return `It is now ${globalStat[currentPlayer].name}'s turn`;
 };
 
 var checkForDraw = function (array) {
@@ -275,7 +273,7 @@ var main = function (input) {
     document.querySelector("#hit-button").disabled = false;
     document.querySelector("#stand-button").disabled = false;
     document.querySelector("#continue-button").disabled = true;
-    myOutputValue = `All the card has been dealt to players. ${globalStat[currentPlayer].name} do you want to hit`;
+    myOutputValue = `All the cards have been dealt to players. ${globalStat[currentPlayer].name}, do you want to hit?`;
   }
   if (gameMode == 4) {
     currentPlayer = 0;

@@ -160,27 +160,27 @@
         var result = initPlayer (playerName.value);
         cont.disabled = false;
         playerName.value = "";
-        expose();
+        showTableStatus();
         output.innerHTML = result;
       });
 
       cont.addEventListener("click", function() {
         var result = main ();
-        expose();
+        showTableStatus();
         showCurrPlayer();
         output.innerHTML = result;
       });
 
       hitButton.addEventListener("click", function () {
         var result = hit ();
-        expose();
+        showTableStatus();
         showCurrPlayer();
         output.innerHTML = result;
       });
 
       standButton.addEventListener("click", function () {
         var result = stand ();
-        expose();
+        showTableStatus();
         showCurrPlayer();
         output.innerHTML = result;
       });

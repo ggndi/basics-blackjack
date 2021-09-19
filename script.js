@@ -3,6 +3,7 @@ var initDealer = function () {
     name: "Dealer",
     cartAtHand: [],
     bust: false,
+    winner: false,
   };
 };
 
@@ -15,6 +16,7 @@ var initPlayer = function (input) {
     name: input,
     cartAtHand: [],
     bust: false,
+    winner: false,
   };
   globalStat.push(playerObject);
 
@@ -35,6 +37,8 @@ var dealCard = function (playerIndex, noOfCard) {
   }
 };
 
+// winOutcome: 0 = everyone busted, 1 = unique winner, 2 = draw
+// return: -1 = no clear / unique winner , winnerIndex = clear winner
 var findWinner = function () {
   var maxScore = 0;
   scoreList = [];
@@ -55,6 +59,11 @@ var findWinner = function () {
   }
   if (checkForDraw(scoreList)) {
     winOutcome = 2;
+    for (let i = 0; i < globalStat.length; i++) {
+      if (scoreList[i] == maxScore) {
+        globalStat[i].winner = true;
+      }
+    }
     return -1;
   }
   winOutcome = 1;
@@ -208,7 +217,7 @@ function showCurrPlayer() {
     globalStat[currentPlayer].name;
 }
 
-function expose() {
+function showTableStatus() {
   var statusStatement = [];
   if (typeof globalStat[1] != "undefined") {
     for (let i = 1; i < globalStat.length; i++) {
@@ -307,15 +316,17 @@ var main = function (input) {
     document.querySelector("#continue-button").disabled = true;
     findWinner();
     if (winOutcome == 0) {
-      return `Everyone has busted, it's a draw`;
-    }
-    if (winOutcome == 1) {
-      return `The winner is ` + findWinner() + ` 🎉`;
-    }
-    if (winOutcome == 2) {
-      return `It is a draw, two or more players shared the same score`;
+      myOutputValue = `Everyone has busted, it's a draw`;
+    } else if (winOutcome == 1) {
+      myOutputValue = `The winner is ` + findWinner() + ` 🎉`;
+    } else if (winOutcome == 2) {
+      myOutputValue = `It is a draw. The following players share the same score: `;
+      for (let i = 0; i < globalStat.length; i++) {
+        if (globalStat[i].winner) {
+          myOutputValue = myOutputValue + `${globalStat[i].name} `;
+        }
+      }
     }
   }
-
   return myOutputValue;
 };

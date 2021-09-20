@@ -19,7 +19,7 @@ var initPlayer = function (input) {
   };
   globalStat.push(playerObject);
   if (globalStat.length == Number(noOfPlayer) + 1) {
-    gameMode = 2;
+    gameMode = 1;
     document.querySelector("#submit-button").disabled = true;
     document.querySelector("#input-field").disabled = true;
     document.querySelector("#continue-button").style.visibility = "visible";
@@ -35,10 +35,33 @@ var dealCard = function (playerIndex, noOfCard) {
   }
 };
 
+var checkForBlackJack = function (array) {
+  for (let i = 0; i < array.length; i++) {
+    if (array[i] == 21) {
+      return true;
+    }
+  }
+  return false;
+};
+
+// Run through the value of the array and see if there is duplicate
+// The array value of 0 will not be considered
+var checkForDraw = function (array) {
+  let valuesAlreadySeen = [];
+  for (let i = 0; i < array.length; i++) {
+    let value = array[i];
+    if (valuesAlreadySeen.indexOf(value) !== -1 && value != 0) {
+      return true;
+    }
+    valuesAlreadySeen.push(value);
+  }
+  return false;
+};
+
 // winOutcome: 0 = everyone busted, 1 = unique winner, 2 = draw
 // return: -1 = no clear / unique winner , winnerIndex = clear winner
 var findWinner = function () {
-  var maxScore = 0;
+  //Generate score list
   scoreList = [];
   for (let i = 0; i < globalStat.length; i++) {
     var score = 0;
@@ -50,22 +73,46 @@ var findWinner = function () {
     }
     scoreList.push(score);
   }
+
   maxScore = Math.max.apply(Math, scoreList);
+
+  // If there is blackjack condition
+  if (checkForBlackJack(scoreList)) {
+    if (checkForDraw(scoreList)) {
+      for (let i = 0; i < scoreList.length; i++) {
+        if (scoreList[i] == 21) {
+          globalStat[i].winner = true;
+        }
+        winOutcome = 2;
+        return -1;
+      }
+    } else {
+      globalStat[scoreList.indexOf(maxScore)].winner = true;
+      winOutcome = 1;
+      return globalStat[scoreList.indexOf(21)].name;
+    }
+  }
+  // If maxScore is 0 - everyone has busted
   if (maxScore == 0) {
     winOutcome = 0;
     return -1;
   }
-  if (checkForDraw(scoreList)) {
-    winOutcome = 2;
-    for (let i = 0; i < globalStat.length; i++) {
+  // Set winner status for the highest score
+  else if (maxScore != 0) {
+    for (let i = 0; i < scoreList.length; i++) {
       if (scoreList[i] == maxScore) {
         globalStat[i].winner = true;
       }
     }
-    return -1;
+    // Check for Draw
+    if (checkForDraw(scoreList)) {
+      winOutcome = 2;
+      return -1;
+    } else {
+      winOutcome = 1;
+      return globalStat[scoreList.indexOf(maxScore)].name;
+    }
   }
-  winOutcome = 1;
-  return globalStat[scoreList.indexOf(maxScore)].name;
 };
 
 var shuffleCards = function (cardDeck) {
@@ -80,37 +127,6 @@ var shuffleCards = function (cardDeck) {
   }
   return cardDeck;
 };
-
-/* var makeDeck = function () {
-  var cardDeck = [];
-  var suits = ["♥️", "♦️", "♣️", "♠️"];
-  var suitIndex = 0;
-  while (suitIndex < suits.length) {
-    var currentSuit = suits[suitIndex];
-    var rankCounter = 1;
-    while (rankCounter <= 13) {
-      var cardName = rankCounter;
-      if (cardName == 1) {
-        cardName = "A";
-      } else if (cardName == 11) {
-        cardName = "J";
-      } else if (cardName == 12) {
-        cardName = "Q";
-      } else if (cardName == 13) {
-        cardName = "K";
-      }
-      var card = {
-        name: cardName,
-        suit: currentSuit,
-        rank: rankCounter,
-      };
-      cardDeck.push(card);
-      rankCounter += 1;
-    }
-    suitIndex += 1;
-  }
-  return cardDeck;
-}; */
 
 var makeDeck = function () {
   var cardDeck = [];
@@ -205,7 +221,6 @@ var isCurrPlayerBust = function () {
 var initGame = function (input) {
   noOfPlayer = input;
   initDealer();
-  // gameMode = 1;
   return `Game has been set for ${noOfPlayer} player(s). Next, enter the player name.`;
 };
 
@@ -226,7 +241,7 @@ var hit = function () {
       myOutputValue = sta2;
     } else {
       currentPlayer = 0;
-      gameMode = 4;
+      gameMode = 2;
       myOutputValue = sta3;
       document.querySelector("#hit-button").disabled = true;
       document.querySelector("#stand-button").disabled = true;
@@ -239,7 +254,7 @@ var hit = function () {
 var stand = function () {
   currentPlayer++;
   if (currentPlayer == Number(noOfPlayer) + 1) {
-    gameMode = 4;
+    gameMode = 2;
     currentPlayer--;
     document.querySelector("#hit-button").disabled = true;
     document.querySelector("#stand-button").disabled = true;
@@ -247,18 +262,6 @@ var stand = function () {
     return `Everyone had their turn. It is now dealer's turn. Click continue`;
   }
   return `It is now ${globalStat[currentPlayer].name}'s turn`;
-};
-
-var checkForDraw = function (array) {
-  let valuesAlreadySeen = [];
-  for (let i = 0; i < array.length; i++) {
-    let value = array[i];
-    if (valuesAlreadySeen.indexOf(value) !== -1 && value != 0) {
-      return true;
-    }
-    valuesAlreadySeen.push(value);
-  }
-  return false;
 };
 
 function showCurrPlayer() {
@@ -311,35 +314,34 @@ function resetGame() {
 
 var changeAceValue = function (input) {
   aceValue = input;
-  console.log(`Ace Value is changed to ${input}`);
 };
 
 var aceValue = 1;
 var cardDeck = shuffleCards(makeDeck());
 var globalStat = [];
+// 0: game start | 1: deal player card | 2: deal dealer card | 3: final output
 var gameMode = 0;
 var noOfPlayer;
 var currentPlayer = 1;
 var scoreList = [];
 var winOutcome = 0;
+var maxScore = 0;
 
 var main = function (input) {
   var winner;
   var myOutputValue = "";
 
-  if (gameMode == 2) {
+  if (gameMode == 1) {
     for (let i = 1; i < globalStat.length; i++) {
       dealCard(i, 2);
     }
-    gameMode = 3;
     document.querySelector("#hit-button").style.visibility = "visible";
     document.querySelector("#stand-button").style.visibility = "visible";
     document.querySelector("#hit-button").disabled = false;
     document.querySelector("#stand-button").disabled = false;
     document.querySelector("#continue-button").disabled = true;
     myOutputValue = `All the cards have been dealt to players. ${globalStat[currentPlayer].name}, do you want to hit?`;
-  }
-  if (gameMode == 4) {
+  } else if (gameMode == 2) {
     currentPlayer = 0;
     dealCard(0, 2);
     var dealerScore = 0;
@@ -365,22 +367,26 @@ var main = function (input) {
     } else {
       myOutputValue = `Dealer has been dealt 2 cards and chose to hit ${j} times.`;
     }
-    gameMode = 5;
-  } else if (gameMode == 5) {
+    gameMode = 3;
+  } else if (gameMode == 3) {
     document.getElementById("currPlayer").innerHTML = "";
     document.querySelector("#continue-button").disabled = true;
     findWinner();
     if (winOutcome == 0) {
       myOutputValue = `Everyone has busted, it's a draw`;
     } else if (winOutcome == 1) {
-      myOutputValue = `The winner is ` + findWinner() + ` 🎉`;
+      myOutputValue = `The winner is ` + findWinner() + ` 🎉 `;
+      if (maxScore == 21) {
+        myOutputValue = myOutputValue + `With a blackjack!`;
+      }
     } else if (winOutcome == 2) {
-      myOutputValue = `It is a draw. The following players share the same score: `;
+      myOutputValue = `It is a draw. <br>The following players share the same score: `;
       for (let i = 0; i < globalStat.length; i++) {
         if (globalStat[i].winner) {
           myOutputValue = myOutputValue + `${globalStat[i].name} `;
         }
       }
+      myOutputValue = myOutputValue + "<br>" + `Their score is ${maxScore}.`;
     }
   }
   return myOutputValue;

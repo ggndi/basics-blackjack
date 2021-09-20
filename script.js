@@ -11,7 +11,6 @@ var initPlayer = function (input) {
   if (input == "") {
     return `Name was not entered, please enter properly!`;
   }
-
   var playerObject = {
     name: input,
     cartAtHand: [],
@@ -19,7 +18,6 @@ var initPlayer = function (input) {
     winner: false,
   };
   globalStat.push(playerObject);
-
   if (globalStat.length == Number(noOfPlayer) + 1) {
     gameMode = 2;
     document.querySelector("#submit-button").disabled = true;
@@ -83,7 +81,7 @@ var shuffleCards = function (cardDeck) {
   return cardDeck;
 };
 
-var makeDeck = function () {
+/* var makeDeck = function () {
   var cardDeck = [];
   var suits = ["♥️", "♦️", "♣️", "♠️"];
   var suitIndex = 0;
@@ -112,6 +110,84 @@ var makeDeck = function () {
     suitIndex += 1;
   }
   return cardDeck;
+}; */
+
+var makeDeck = function () {
+  var cardDeck = [];
+  var suits = ["♥️", "♦️", "♣️", "♠️"];
+  var suitIndex = 0;
+  while (suitIndex < suits.length) {
+    var currentSuit = suits[suitIndex];
+    if (aceValue == 1) {
+      var rankCounter = 1;
+      while (rankCounter <= 13) {
+        var cardName = rankCounter;
+        if (cardName == 1) {
+          cardName = "A";
+        } else if (cardName == 11) {
+          cardName = "J";
+          rankCounter = 10;
+        } else if (cardName == 12) {
+          cardName = "Q";
+          rankCounter = 10;
+        } else if (cardName == 13) {
+          cardName = "K";
+          rankCounter = 10;
+        }
+        var card = {
+          name: cardName,
+          suit: currentSuit,
+          rank: rankCounter,
+        };
+        cardDeck.push(card);
+        if (cardName == "J") {
+          rankCounter = 11;
+        }
+        if (cardName == "Q") {
+          rankCounter = 12;
+        }
+        if (cardName == "K") {
+          rankCounter = 13;
+        }
+        rankCounter += 1;
+      }
+    } else if (aceValue == 11) {
+      var rankCounter = 2;
+      while (rankCounter <= 14) {
+        var cardName = rankCounter;
+        if (cardName == 11) {
+          cardName = "A";
+        } else if (cardName == 12) {
+          cardName = "J";
+          rankCounter = 10;
+        } else if (cardName == 13) {
+          cardName = "Q";
+          rankCounter = 10;
+        } else if (cardName == 14) {
+          cardName = "K";
+          rankCounter = 10;
+        }
+        var card = {
+          name: cardName,
+          suit: currentSuit,
+          rank: rankCounter,
+        };
+        cardDeck.push(card);
+        if (cardName == "J") {
+          rankCounter = 12;
+        }
+        if (cardName == "Q") {
+          rankCounter = 13;
+        }
+        if (cardName == "K") {
+          rankCounter = 14;
+        }
+        rankCounter += 1;
+      }
+    }
+    suitIndex += 1;
+  }
+  return cardDeck;
 };
 
 var isCurrPlayerBust = function () {
@@ -129,7 +205,7 @@ var isCurrPlayerBust = function () {
 var initGame = function (input) {
   noOfPlayer = input;
   initDealer();
-  gameMode = 1;
+  // gameMode = 1;
   return `Game has been set for ${noOfPlayer} player(s). Next, enter the player name.`;
 };
 
@@ -157,32 +233,6 @@ var hit = function () {
       document.querySelector("#continue-button").disabled = false;
     }
   }
-  /* var myOutputValue;
-  if (isCurrPlayerBust()) {
-    globalStat[currentPlayer].bust = true;
-    myOutputValue = `${globalStat[currentPlayer].name} have bust. `;
-    if (currentPlayer == noOfPlayer) {
-      gameMode = 4;
-      currentPlayer = 0;
-    } else {
-      currentPlayer++;
-    }
-    if (currentPlayer < globalStat.length && gameMode != 4) {
-      myOutputValue =
-        myOutputValue +
-        ` ${
-          globalStat[Number(currentPlayer)].name
-        } it is now your turn to hit or stand.`;
-    }
-  } else if (gameMode != 4) {
-    myOutputValue = `${globalStat[currentPlayer].name} have hit. And you are alive`;
-  } else if (gameMode == 4) {
-    document.querySelector("#hit-button").disabled = true;
-    document.querySelector("#stand-button").disabled = true;
-    document.querySelector("#continue-button").disabled = false;
-    myOutputValue =
-      myOutputValue + ` Please click continue to deal the dealer.`;
-  } */
   return myOutputValue;
 };
 
@@ -212,7 +262,6 @@ var checkForDraw = function (array) {
 };
 
 function showCurrPlayer() {
-  console.log(currentPlayer);
   document.getElementById("currPlayer").innerHTML =
     globalStat[currentPlayer].name;
 }
@@ -260,6 +309,12 @@ function resetGame() {
   winOutcome = 0;
 }
 
+var changeAceValue = function (input) {
+  aceValue = input;
+  console.log(`Ace Value is changed to ${input}`);
+};
+
+var aceValue = 1;
 var cardDeck = shuffleCards(makeDeck());
 var globalStat = [];
 var gameMode = 0;

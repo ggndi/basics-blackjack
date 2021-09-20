@@ -107,6 +107,13 @@
           />
           <button id="start-button">Start</button>
         </div>
+         <div>
+          <p>Ace Value:</p>
+          <select name="ace-value" id="ace-value">
+            <option value=1>1</option>
+            <option value=11>11</option>
+          </select>
+        </div> 
         <div id="name-field">
           <p>Input:</p>
           <input id="input-field" />
@@ -141,13 +148,18 @@
       var submit = document.querySelector("#submit-button");
       var reset = document.querySelector("#reset-button");
       var output = document.querySelector("#output-div");
+      var numPlayers = document.querySelector ("#num-player");
+      var playerName = document.querySelector ("#input-field");
+      var selectedAceValue = document.querySelector ("#ace-value");
 
       start.addEventListener("click", function() {
-        var numPlayers = document.querySelector ("#num-player");
+        // var numPlayers = document.querySelector ("#num-player");
         var result = initGame (numPlayers.value);
+        changeAceValue (selectedAceValue.value);
         document.querySelector("#name-field").style.visibility = "visible";
         document.querySelector("#input-field").style.visibility = "visible";
         start.disabled = true;
+        selectedAceValue.disabled = true;
         numPlayers.disabled = true;
         submit.disabled = false;
         submit.style.visibility = "visible";
@@ -156,7 +168,6 @@
       });
 
       submit.addEventListener("click", function() {
-        var playerName = document.querySelector ("#input-field");
         var result = initPlayer (playerName.value);
         cont.disabled = false;
         playerName.value = "";
@@ -189,6 +200,8 @@
       reset.addEventListener("click", function () {
         resetGame();
         start.disabled = false;
+        selectedAceValue.disabled = false;
+        playerName.value = "";
         document.querySelector ("#input-field").disabled = false;
         document.querySelector ("#num-player").disabled = false;
         document.querySelector("#name-field").style.visibility = "hidden";

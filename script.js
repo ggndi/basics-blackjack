@@ -78,7 +78,13 @@ var findWinner = function () {
 
   // If there is blackjack condition
   if (checkForBlackJack(scoreList)) {
-    if (checkForDraw(scoreList)) {
+    let blackjackCount = 0;
+    for (let i = 0; i < scoreList.length; i++) {
+      if (scoreList[i] == 21) {
+        blackjackCount++;
+      }
+    }
+    if (checkForDraw(scoreList) && blackjackCount > 1) {
       for (let i = 0; i < scoreList.length; i++) {
         if (scoreList[i] == 21) {
           globalStat[i].winner = true;
@@ -104,8 +110,14 @@ var findWinner = function () {
         globalStat[i].winner = true;
       }
     }
+    let maxScoreCount = 0;
+    for (let i = 0; i < scoreList.length; i++) {
+      if (scoreList[i] == maxScore) {
+        maxScoreCount++;
+      }
+    }
     // Check for Draw
-    if (checkForDraw(scoreList)) {
+    if (checkForDraw(scoreList) && maxScoreCount > 1) {
       winOutcome = 2;
       return -1;
     } else {
@@ -377,10 +389,12 @@ var main = function (input) {
     } else if (winOutcome == 1) {
       myOutputValue = `The winner is ` + findWinner() + ` 🎉 `;
       if (maxScore == 21) {
-        myOutputValue = myOutputValue + `With a blackjack!`;
+        myOutputValue = myOutputValue + `with a blackjack!`;
+      } else {
+        myOutputValue = myOutputValue + ` with a score of ${maxScore}`;
       }
     } else if (winOutcome == 2) {
-      myOutputValue = `It is a draw. <br>The following players share the same score: `;
+      myOutputValue = `It is a draw. The following players share the same score: `;
       for (let i = 0; i < globalStat.length; i++) {
         if (globalStat[i].winner) {
           myOutputValue = myOutputValue + `${globalStat[i].name} `;

@@ -53,6 +53,12 @@ button {
   padding: 0 3px;
 }
 
+select {
+  height: 38px;
+  width: 65px;
+  font-size: 21px;
+}
+
 #output-div {
   background-color: lightgrey;
   margin: 20px auto;

@@ -154,8 +154,8 @@
 
       start.addEventListener("click", function() {
         // var numPlayers = document.querySelector ("#num-player");
-        var result = initGame (numPlayers.value);
         changeAceValue (selectedAceValue.value);
+        var result = initGame (numPlayers.value);
         document.querySelector("#name-field").style.visibility = "visible";
         document.querySelector("#input-field").style.visibility = "visible";
         start.disabled = true;

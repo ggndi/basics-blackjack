@@ -147,6 +147,7 @@ var makeDeck = function () {
   while (suitIndex < suits.length) {
     var currentSuit = suits[suitIndex];
     if (aceValue == 1) {
+      console.log("Card deck is made for ace value");
       var rankCounter = 1;
       while (rankCounter <= 13) {
         var cardName = rankCounter;
@@ -180,6 +181,7 @@ var makeDeck = function () {
         rankCounter += 1;
       }
     } else if (aceValue == 11) {
+      console.log("Card deck is made for ace value 11");
       var rankCounter = 2;
       while (rankCounter <= 14) {
         var cardName = rankCounter;
@@ -232,6 +234,7 @@ var isCurrPlayerBust = function () {
 
 var initGame = function (input) {
   noOfPlayer = input;
+  cardDeck = shuffleCards(makeDeck());
   initDealer();
   return `Game has been set for ${noOfPlayer} player(s). Next, enter the player name.`;
 };
@@ -325,11 +328,12 @@ function resetGame() {
 }
 
 var changeAceValue = function (input) {
+  console.log(`Ace Value is now ${input}`);
   aceValue = input;
 };
 
 var aceValue = 1;
-var cardDeck = shuffleCards(makeDeck());
+var cardDeck;
 var globalStat = [];
 // 0: game start | 1: deal player card | 2: deal dealer card | 3: final output
 var gameMode = 0;
